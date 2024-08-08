@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="../../static/sistema_principal/images/favicon-32x32.png" type="image/x-icon">
+    <link rel="stylesheet" href="../../static/sistema_principal/css/register.css">
+    <title>Registrar</title>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo-nome">
+                <a href="{% url 'inicio' %}" class="nome_loja-link">
+                    <h1 class="nome_loja">SICKFIT</h1>
+                </a>
+            </div>
+            <div class="search-bar">
+                <form action="{% url 'pesquisar' %}" method="get">
+                    <input type="text" name="q" placeholder="Pesquisar...">
+                    <button type="submit">Buscar</button>
+                </form>
+            </div>
+            <div class="menu">
+                <ul class="menu-list">
+                    <li class="menu-item dropdown">
+                        <a href="#" class="categoria">Categorias</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'categoria' 1 %}">Camisas</a></li>
+                            <li><a href="{% url 'categoria' 3 %}">Calças</a></li>
+                            <li><a href="{% url 'categoria' 4 %}">Acessórios</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div>
+
+                <div class="dropdown">
+                    <img src="../../static/sistema_principal/images/login.jpg" alt="Login" class="login">
+                    <div class="dropdown-content">
+                        <a href="{% url 'login' %}">Entrar</a>
+                    </div>
+                </div>
+                
+                <a href="{% url 'carrinho' %}"><img src="../../static/sistema_principal/images/carrinho1.png" alt="Carrinho" class="carro"></a>
+                <a href=""><img src="../../static/sistema_principal/images/coração.png" alt="" class="coracao"></a>
+            </div>
+        </div>
+    </header>
+    <div class="box">
+        <h2>Registrar</h2>
+        <form method="post" action="{% url 'registrar' %}">
+            {% csrf_token %}
+            {{ form.non_field_errors }}  <!-- Exibe erros não específicos de campo -->
+            <div class="form-group">
+                {{ form.username.label_tag }} {{ form.username }} {{ form.username.errors }}
+            </div>
+            <div class="form-group">
+                {{ form.email.label_tag }} {{ form.email }} {{ form.email.errors }}
+            </div>
+            <div class="form-group">
+                {{ form.password1.label_tag }} {{ form.password1 }} {{ form.password1.errors }}
+            </div>
+            <div class="form-group">
+                {{ form.password2.label_tag }} {{ form.password2 }} {{ form.password2.errors }}
+            </div>
+            <button type="submit">Registrar</button>
+        </form>
+    </div>
+</body>
+</html>

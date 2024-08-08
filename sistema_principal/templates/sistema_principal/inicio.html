@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="../../static/sistema_principal/images/favicon-32x32.png" type="image/x-icon">
+    <link rel="stylesheet" href="../../static/sistema_principal/css/index.css">
+    <title>Sickfit</title>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo-nome">
+                <a href="{% url 'inicio' %}" class="nome_loja-link">
+                    <h1 class="nome_loja">SICKFIT</h1>
+                </a>
+            </div>
+            <div class="search-bar">
+                <form action="{% url 'pesquisar' %}" method="get">
+                    <input type="text" name="q" placeholder="Pesquisar...">
+                    <button type="submit">Buscar</button>
+                </form>
+            </div>
+            <div class="menu">
+                <ul class="menu-list">
+                    <li class="menu-item dropdown">
+                        <a href="#" class="categoria">Categorias</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'categoria' 1 %}">Camisas</a></li>
+                            <li><a href="{% url 'categoria' 3 %}">Calças</a></li>
+                            <li><a href="{% url 'categoria' 4 %}">Acessórios</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="user-options">
+                {% if user.is_authenticated %}
+                    <div class="dropdown">
+                        <img src="../../static/sistema_principal/images/login.jpg" alt="Login" class="login">
+                        <div class="dropdown-content">
+                            <p>Bem-vindo, {{ user.username|title }}!</p>
+                            <a href="">Meus pedidos</a>
+                            <a href="{% url 'logout' %}">Sair</a>
+                        </div>
+                    </div>
+                    
+                {% else %}
+                    <div class="dropdown">
+                        <img src="../../static/sistema_principal/images/login.jpg" alt="Login" class="login">
+                        <div class="dropdown-content">
+                            <a href="{% url 'registrar' %}">Registrar</a>
+                            <a href="{% url 'login' %}">Entrar</a>
+                        </div>
+                    </div>
+                {% endif %}
+            {% if user.is_authenticated %}
+                <a href="{% url 'carrinho' %}"><img src="../../static/sistema_principal/images/carrinho1.png" alt="Carrinho" class="carro"></a>
+                <a href="{% url 'lista_favoritos' %}"><img src="../../static/sistema_principal/images/coração.png" alt="Favoritos" class="coracao"></a>
+            {% else %}
+                <a href="{% url 'login' %}"><img src="../../static/sistema_principal/images/carrinho1.png" alt="Carrinho" class="carro"></a>
+                <a href="{% url 'login' %}"><img src="../../static/sistema_principal/images/coração.png" alt="Favoritos" class="coracao"></a>
+            {% endif %}
+            </div>
+        </div>
+    </header>
+    <main>
+        <div class="conjunto_1">
+            {% for produto in produtos|slice:":15" %}
+                <div class="produto-item">
+                    <div>
+                        {% if produto.primeira_imagem %}
+                            <a href="{% url 'produto_detalhes' produto.id %}"><img src="{{ produto.primeira_imagem.imagem.url }}" alt="{{ produto.nome }}" class="img-standard-size"></a>
+                        {% else %}
+                            <img src="../../static/sistema_principal/images/placeholder.png" alt="Sem imagem disponível" class="img-standard-size">
+                        {% endif %}
+                    </div>
+                    <a href="{% url 'produto_detalhes' produto.id %}">
+                        <div >
+                             <p class="nome-produto">{{ produto.nome|slice:":30" }}...</p>
+                        </div>
+                    </a>
+                    
+                    <p class="preco-produto">R$ {{ produto.valortotal }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    </main>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../static/sistema_principal/css/carrinho.css">
+    <link rel="shortcut icon" href="../../static/sistema_principal/images/favicon-32x32.png" type="image/x-icon">
+    <title>Carrinho</title>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo-nome">
+                <a href="{% url 'inicio' %}" class="nome_loja-link">
+                    <h1 class="nome_loja">SICKFIT</h1>
+                </a>
+            </div>
+            <div class="search-bar">
+                <form action="{% url 'pesquisar' %}" method="get">
+                    <input type="text" name="q" placeholder="Pesquisar...">
+                    <button type="submit">Buscar</button>
+                </form>
+            </div>
+            <div class="menu">
+                <ul class="menu-list">
+                    <li class="menu-item dropdown">
+                        <a href="#" class="categoria">Categorias</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'categoria' 1 %}">Camisas</a></li>
+                            <li><a href="{% url 'categoria' 3 %}">Calças</a></li>
+                            <li><a href="{% url 'categoria' 4 %}">Acessórios</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div>
+            
+                {% if user.is_authenticated %}
+                    <!-- Usuário logado, mostra opções de logout e perfil -->
+                    <div class="dropdown">
+                        <img src="../../static/sistema_principal/images/login.jpg" alt="Login" class="login">
+                        <div class="dropdown-content">
+                            <p>Bem-vindo, {{ user.username|title }}!</p>
+                            <a href="#">Meus pedidos</a>
+                            <a href="{% url 'logout' %}">Sair</a>
+                        </div>
+                    </div>
+                {% else %}
+                    <!-- Usuário não logado, mostra opções de login e registrar -->
+                    <div class="dropdown">
+                        <img src="../../static/sistema_principal/images/login.jpg" alt="Login" class="login">
+                        <div class="dropdown-content">
+                            <a href="{% url 'registrar' %}">Registrar</a>
+                            <a href="{% url 'login' %}">Entrar</a>
+                        </div>
+                    </div>
+                {% endif %}
+                
+                <a href="{% url 'carrinho' %}"><img src="../../static/sistema_principal/images/carrinho1.png" alt="Carrinho" class="carro"></a>
+                <a href="{% url 'lista_favoritos' %}"><img src="../../static/sistema_principal/images/coração.png" alt="" class="coracao"></a>
+            </div>
+        </div>
+    </header>
+    
+    <main>
+        <div class="box">
+            <h1>Carrinho de Compras</h1>
+            {% if produtos %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Produto</th>
+                            <th>Tamanho</th>
+                            <th>Quantidade</th>
+                            <th>Subtotal</th>
+                            <th>Ação</th> <!-- Nova coluna para ações -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in produtos %}
+                            <td>{{ item.produto.nome }}</td>
+                            <td>{{ item.tamanho }}</td>
+                            <td>{{ item.quantidade }}</td>
+                            <td>R$: {{ item.subtotal }}</td>
+                            <td> {{ item.produto.id }}</td>
+                            <td>
+                                <form action="{% url 'remover_item' item.produto.id %}" method="post">
+                                    {% csrf_token %}
+                                    <button type="submit">Remover</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                {% if valor_total > 40 %}
+                    <h3 class="teste">Total: R$ {{ valor_total }}</h3>
+                    <button class="compra"><a href="{% url 'checkout' %}" class="checkout-btn">Finalizar Compra</a></button>
+                {% else %}
+                    {% with frete=15 %}
+                        <p>Compras com valor superior a 40 o frete é gratuito, o frete padrão é 15 reais</p>
+                        <h3 class="teste">Total + frete = R$ {{ valor_total|add:frete}}</h3>
+                        <button class="compra"><a href="{% url 'checkout' %}" class="checkout-btn">Finalizar Compra</a></button>
+                    {% endwith %}
+                {% endif %}
+            {% else %}
+                <p>Seu carrinho está vazio.</p>
+            {% endif %}
+        </div>
+    </main>
+    
+</body>
+</html>

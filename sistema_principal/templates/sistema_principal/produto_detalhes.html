@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="../../static/sistema_principal/images/favicon-32x32.png" type="image/x-icon">
+    <link rel="stylesheet" href="../../static/sistema_principal/css/produto_detalhe.css">
+    <title>{{ produto.nome }}</title>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo-nome">
+                <a href="{% url 'inicio' %}" class="nome_loja-link">
+                    <h1 class="nome_loja">SICKFIT</h1>
+                </a>
+            </div>
+            <div class="search-bar1">
+                <form action="{% url 'pesquisar' %}" method="get" class="search-bar">
+                    <input type="text" name="q" placeholder="Pesquisar...">
+                    <button type="submit" class="">Buscar</button>
+                </form>
+            </div>
+            <div class="menu">
+                <ul class="menu-list">
+                    <li class="menu-item dropdown">
+                        <a href="#" class="categoria">Categorias</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'categoria' 1 %}">Camisas</a></li>
+                            <li><a href="{% url 'categoria' 3 %}">Calças</a></li>
+                            <li><a href="{% url 'categoria' 4 %}">Acessórios</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div>
+                {% if user.is_authenticated %}
+                    <!-- Usuário logado, mostra opções de logout e perfil -->
+                    <div class="dropdown">
+                        <img src="../../static/sistema_principal/images/login.jpg" alt="Login" class="login">
+                        <div class="dropdown-content">
+                            <p>Bem-vindo, {{ user.username|title }}!</p>
+                            <a href="#">Meus pedidos</a>
+                            <a href="{% url 'logout' %}">Sair</a>
+                        </div>
+                    </div>
+                {% else %}
+                    <!-- Usuário não logado, mostra opções de login e registrar -->
+                    <div class="dropdown">
+                        <img src="../../static/sistema_principal/images/login.jpg" alt="Login" class="login">
+                        <div class="dropdown-content">
+                            <a href="{% url 'registrar' %}">Registrar</a>
+                            <a href="{% url 'login' %}">Entrar</a>
+                        </div>
+                    </div>
+                {% endif %}
+                
+                <a href="{% url 'carrinho' %}"><img src="../../static/sistema_principal/images/carrinho1.png" alt="Carrinho" class="carro"></a>
+                <a href="{% url 'lista_favoritos' %}"><img src="../../static/sistema_principal/images/coração.png" alt="Favoritos" class="coracao"></a>
+            </div>
+        </div>
+    </header>
+    
+    <main>
+        <div class="box">
+            <hr class="linha-vertical"> 
+            <div class="produto-detalhes">
+                <h2 class="titulo_produto">{{ produto.nome }}</h2>
+                <h2 class="titulo_produto1">R$: {{ produto.valortotal }}</h2>
+                <h2 class="titulo_produto2">Tamanho</h2>
+                <div class="tamanhos">
+                    <button type="button" class="tamanho-btn">P</button>
+                    <button type="button" class="tamanho-btn">M</button>
+                    <button type="button" class="tamanho-btn">G</button>
+                    <button type="button" class="tamanho-btn">GG</button>
+                </div>
+             
+                <h2 class="titulo_produto3">Quantidade :</h2>
+                <form action="{% url 'adicionar_ao_carrinho' produto.id %}" method="post" class="adicionar-carrinho-form">
+                    {% csrf_token %}
+                    <input type="number" min="1" max="100" value="1" name="quantidade" class="titulo_produto4">
+                    <input type="hidden" name="tamanho" value="P"> <!-- Default tamanho -->
+                {% if user.is_authenticated %}
+                    <button type="submit" class="adicionar_carrinho">Adicionar ao Carrinho</button>
+                {% else %}
+                    <a href="{% url 'login' %}" class="adicionar_carrinho">Adicionar ao Carrinho</a>
+                
+                {% endif %}
+                
+                </form>
+                {% if user.is_authenticated %}
+                    <a href="#"></a>
+                {% else %}
+                    <a href="{% url 'login' %}"><img src="../../static/sistema_principal/images/coração.png" alt="Favoritos" class="favorito"></a>
+                {% endif %}
+                <div class="teste">
+                    
+                    {% if user.is_authenticated %}
+                        
+
+                        <form action="{% url 'adicionar_remover_favorito' produto_id=produto.id %}" method="POST" class="favorito-form">
+                            {% csrf_token %}
+                            <button type="submit" class="">
+                                {% if is_favorito %}
+                                    Remover dos Favoritos
+                                {% else %}
+                                    Adicionar aos Favoritos
+                                {% endif %}
+                            </button>
+                        </form>
+                    {% else %}
+                        
+                        
+                    {% endif %}
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <div class="produto-imagem">
+                    <!-- Imagem em destaque -->
+                    <img src="{{ produto.imagens.first.imagem.url }}" alt="{{ produto.nome }}" class="imagem-destaque">
+            
+                    <!-- Miniaturas de imagens -->
+                    <div class="miniaturas">
+                        {% for imagem in produto.imagens.all %}
+                            <img src="{{ imagem.imagem.url }}" alt="{{ produto.nome }} - Imagem {{ forloop.counter }}" class="miniatura" onclick="mostrarImagem('{{ imagem.imagem.url }}')">
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function mostrarImagem(url) {
+            document.querySelector('.imagem-destaque').src = url;
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+        const tamanhoBtns = document.querySelectorAll('.tamanho-btn');
+        const tamanhoInput = document.querySelector('input[name="tamanho"]');
+
+        tamanhoBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                tamanhoBtns.forEach(b => b.classList.remove('selected'));
+                this.classList.add('selected');
+                tamanhoInput.value = this.textContent; // Atualiza o valor do tamanho
+            });
+        });
+    }); 
+    </script>
+</body>
+</html>

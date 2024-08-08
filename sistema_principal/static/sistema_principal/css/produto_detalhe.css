@@ -1,0 +1,531 @@
+/* Variáveis de CSS para temas */
+:root {
+    --primary-color: #ff6600;
+    --secondary-color: #f9f9f9;
+    --background-color: #ffffff;
+    --font-family: Arial, sans-serif;
+    --font-color: #333;
+    --header-color: black;
+    --text-light-color: #fff;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --highlight-color: #f1f1f1;
+    --transition-duration: 0.3s;
+    --border-radius: 5px;
+}
+
+/* Reset de estilos */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Estilos gerais */
+body {
+    font-family: var(--font-family);
+    padding-top: 4rem;
+    background-color: var(--secondary-color);
+    color: var(--font-color);
+}
+
+/* Cabeçalho e navegação */
+header {
+    background-color: var(--header-color);
+    padding: 1rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo-nome {
+    display: flex;
+    align-items: center;
+}
+
+.nome_loja {
+    color: var(--text-light-color);
+    font-size: 2rem;
+    margin-left: 2rem;
+}
+
+.nome_loja-link {
+    color: var(--text-light-color);
+    text-decoration: none;
+}
+
+/* Barra de pesquisa */
+.search-bar {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    margin-left: 1rem;
+}
+
+.search-bar input[type="text"] {
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: var(--border-radius);
+    width: 700px;
+    margin-left: 14rem;
+}
+
+.search-bar button {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    color: var(--text-light-color);
+    background-color: var(--primary-color);
+    border: none;
+    border-radius: var(--border-radius);
+    margin-left: 0.5rem;
+    cursor: pointer;
+    transition: background-color var(--transition-duration);
+}
+
+.search-bar button:hover {
+    background-color: var(--font-color);
+}
+
+/* Menu de categorias */
+.menu {
+    position: relative;
+    font-size: 1rem;
+    color: var(--text-light-color);
+    background-color: var(--primary-color);
+    border: none;
+    border-radius: var(--border-radius);
+    width: 8rem;
+    height: 2.2rem;
+    cursor: pointer;
+    text-align: center;
+    left: -63.8em;
+}
+
+.menu-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.menu-item {
+    position: relative;
+    display: inline-block;
+}
+
+.menu-item a {
+    color: var(--text-light-color);
+    padding: 14px 20px;
+    text-decoration: none;
+    text-align: center;
+    display: block;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: var(--secondary-color);
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    top: 100%;
+    left: 0;
+    border-radius: var(--border-radius);
+}
+
+.dropdown-menu a {
+    color: var(--font-color);
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    transition: background-color var(--transition-duration);
+}
+
+.dropdown-menu a:hover {
+    background-color: var(--highlight-color);
+}
+
+.menu-item:hover .dropdown-menu {
+    display: block;
+}
+
+/* Ícones de login, carrinho e coração */
+.login, .carro, .coracao {
+    width: 35px;
+    border-radius: 100%;
+    transition: transform var(--transition-duration);
+    position: relative;
+}
+
+.carro {
+    left: -12rem;
+}
+
+.coracao {
+    left: -10rem;
+}
+
+.login:hover, .carro:hover, .coracao:hover {
+    transform: scale(1.1);
+}
+
+/* Detalhes do produto */
+.box {
+    box-sizing: border-box;
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    margin: 4rem auto;
+    max-width: 1300px;
+    background-color: var(--background-color);
+    box-shadow: 0 4px 8px var(--shadow-color);
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+}
+
+.categoria {
+    font-family: var(--font-family);
+    font-size: larger;
+    position: relative;
+    text-align: center;
+    top: -0.5rem;
+}
+
+.produto-detalhes {
+    padding: 2rem;
+}
+
+.produto-detalhes h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.produto-detalhes p {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.produto-imagem {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.imagem-destaque {
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+    object-fit: cover;
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius);
+    margin-bottom: 1rem;
+    margin-top: -16rem;
+}
+
+.miniaturas {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 0.5rem;
+}
+
+.miniatura {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: border-color var(--transition-duration);
+}
+
+.miniatura:hover {
+    border-color: var(--primary-color);
+}
+
+/* Produtos */
+.conjunto_1 {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 1rem;
+    justify-content: space-between;
+}
+
+.produto-item {
+    flex: 1 0 17%;
+    margin: 0.5rem;
+    box-sizing: border-box;
+    background-color: var(--background-color);
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    text-align: center;
+}
+
+.nome-produto {
+    font-family: var(--font-family);
+    text-align: left;
+    padding-left: 1rem;
+    top: -0.3rem;
+    font-size: medium;
+    position: relative;
+    right: -0.2rem;
+    color: var(--font-color);
+}
+
+.preco-produto {
+    font-family: var(--font-family);
+    font-size: medium;
+    text-align: left;
+    font-weight: bold;
+    position: relative;
+    right: -1.2rem;
+    color: var(--primary-color);
+}
+
+/* Dropdown */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: var(--secondary-color);
+    min-width: 160px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    border-radius: var(--border-radius);
+}
+
+.dropdown-content a {
+    color: var(--font-color);
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: var(--highlight-color);
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Títulos do produto */
+.titulo_produto {
+    font-family: var(--font-family);
+    font-size: 25px;
+    font-weight: 600;
+    position: relative;
+    right: -42rem;
+}
+
+.titulo_produto1 {
+    font-family: var(--font-family);
+    font-size: 25px;
+    color: var(--primary-color);
+    font-weight: 600;
+    position: relative;
+    right: -42rem;
+}
+
+.titulo_produto2 {
+    font-family: var(--font-family);
+    font-size: 20px;
+    font-weight: 600;
+    position: relative;
+    right: -42rem;
+    top: 5rem;
+}
+.favorito{
+    position: relative;
+    right: -65rem;
+    top: 19.4rem;
+    border-radius: 100%;
+    width: 45px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+.favorito:hover{
+    transform: rotate(1turn); /* Rotaciona o coração */
+}
+.linha-vertical {
+    border: none;
+    border-left: 2px solid var(--font-color); /* Ajuste a cor e a espessura conforme necessário */
+    height: 92.1%;
+    position: absolute; /* Para garantir que ele fique dentro do container */
+    left: 47rem; /* Ajuste a posição conforme necessário */
+    top: 8rem;
+}
+
+.titulo_produto3 {
+    font-family: var(--font-family);
+    font-size: 21px;
+    font-weight: 600;
+    position: relative;
+    right: -41.5rem;
+    top: 11.3rem;
+}
+
+.titulo_produto4 {
+    font-family: var(--font-family);
+    font-size: 20px;
+    font-weight: 600;
+    position: relative;
+    color: #ff6600;
+    right: -50rem;
+    top: 9.4rem;
+}
+/* Botões */
+.tamanho-btn {
+    color: var(--primary-color);
+    background-color: var(--background-color);
+    border-radius: 8px;
+    font-family: var(--font-family);
+    padding: 0.5rem;
+    cursor: pointer;
+    font-size: larger;
+    position: relative;
+    flex-direction: row;
+    right: -42rem;
+    top: 6rem;
+    border: 1px solid transparent;
+    background-color: #000000;
+    color: white;
+}
+
+.adicionar-carrinho-btn{
+    top: 20rem;
+    right: -35rem;
+    background-color: black;
+    color: #ffffff;
+    color: var(--text-light-color);
+    text-decoration: none;
+}
+
+.adicionar-carrinho-btn:hover{
+    color: #ff6600;
+    
+}
+
+button:hover {
+    color: #ff6600;
+
+}
+
+
+.adicionar_carrinho{
+    background-color: var(--background-color);
+    border-radius: 8px;
+    font-family: var(--font-family);
+    padding: 0.5rem;
+    cursor: pointer;
+    font-size: larger;
+    position: relative;
+    flex-direction: row;
+    right: -35rem;
+    top: 22rem;
+    border: 1px solid transparent;
+    background-color: #000000;
+    color: white;
+    text-decoration: none;
+}
+
+
+.teste{
+    position: relative;
+    font-family: Arial, Helvetica, sans-serif;
+    right: -60rem;
+    top: 19.5rem;
+    color: #ffffff;
+    padding: 1;
+}
+
+
+.teste:hover{
+    color: #ff6600;
+}
+
+
+.teste button {
+    background-color: #000000;
+    color: #ffffff;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-size: 18px;
+    transition: background-color var(--transition-duration), color var(--transition-duration);
+    text-decoration: none;
+}
+
+.teste button:hover {
+    color: #ff6600;
+}
+/* Responsividade */
+@media (max-width: 1024px) {
+    .login, .carro, .coracao {
+        left: 0;
+    }
+
+    .menu {
+        left: 0;
+    }
+
+    .search-bar input[type="text"] {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .nome_loja {
+        margin-left: 0;
+        text-align: center;
+        width: 100%;
+    }
+
+    .titulo_produto {
+        font-size: 32px;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .search-bar {
+        margin: 1rem 0;
+        width: 100%;
+    }
+
+    .search-bar input[type="text"] {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .menu {
+        margin-top: 1rem;
+        width: 100%;
+        text-align: center;
+        left: 0;
+    }
+
+    .login, .carro, .coracao {
+        left: 0;
+    }
+
+    .titulo_produto {
+        font-size: 28px;
+        text-align: center;
+    }
+}

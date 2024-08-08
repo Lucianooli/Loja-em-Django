@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../static/sistema_principal/css/checkout.css">
+    <link rel="shortcut icon" href="../../static/sistema_principal/images/favicon-32x32.png" type="image/x-icon">
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var stripe = Stripe('{{ stripe_public_key }}');
+            var elements = stripe.elements();
+            var card = elements.create('card');
+            var cardElement = document.getElementById('card-element');
+            var cardContainer = document.getElementById('card-container');
+            var errorContainer = document.getElementById('card-errors');
+            var form = document.getElementById('payment-form');
+
+            card.mount(cardElement);
+
+            card.addEventListener('change', function(event) {
+                if (event.error) {
+                    errorContainer.textContent = event.error.message;
+                } else {
+                    errorContainer.textContent = '';
+                }
+            });
+
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                if (document.getElementById('pagamento').value === 'credito' || document.getElementById('pagamento').value === 'debito') {
+                    stripe.createToken(card).then(function(result) {
+                        if (result.error) {
+                            errorContainer.textContent = result.error.message;
+                        } else {
+                            var tokenInput = document.createElement('input');
+                            tokenInput.setAttribute('type', 'hidden');
+                            tokenInput.setAttribute('name', 'stripeToken');
+                            tokenInput.setAttribute('value', result.token.id);
+                            form.appendChild(tokenInput);
+                            form.submit();
+                        }
+                    });
+                } else {
+                    form.submit();
+                }
+            });
+
+            document.getElementById('pagamento').addEventListener('change', function() {
+                var selectedValue = this.value;
+                var pixInfo = document.getElementById('pix-info');
+                var boletoInfo = document.getElementById('boleto-info');
+
+                if (selectedValue === 'pix') {
+                    pixInfo.style.display = 'block';
+                    boletoInfo.style.display = 'none';
+                    cardContainer.style.display = 'none';
+                } else if (selectedValue === 'boleto') {
+                    pixInfo.style.display = 'none';
+                    boletoInfo.style.display = 'block';
+                    cardContainer.style.display = 'none';
+                } else {
+                    pixInfo.style.display = 'none';
+                    boletoInfo.style.display = 'none';
+                    cardContainer.style.display = 'block';
+                }
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var stripe = Stripe('{{ stripe_public_key }}');
+            // Resto do código
+        });
+    </script>
+    <title>Checkout</title>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo-nome">
+                <a href="{% url 'inicio' %}" class="nome_loja-link">
+                    <h1 class="nome_loja">SICKFIT</h1>
+                </a>
+            </div>
+            <div class="search-bar">
+                <form action="{% url 'pesquisar' %}" method="get">
+                    <input type="text" name="q" placeholder="Pesquisar...">
+                    <button type="submit">Buscar</button>
+                </form>
+            </div>
+            <div class="menu">
+                <ul class="menu-list">
+                    <li class="menu-item dropdown">
+                        <a href="#" class="categoria">Categorias</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'categoria' 1 %}">Camisas</a></li>
+                            <li><a href="{% url 'categoria' 3 %}">Calças</a></li>
+                            <li><a href="{% url 'categoria' 4 %}">Acessórios</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div>
+
+                <div class="dropdown">
+                    <img src="../../static/sistema_principal/images/login.jpg" alt="Login" class="login">
+                    <div class="dropdown-content">
+                        <a href="{% url 'logout' %}">Logout</a>
+                    </div>
+                </div>
+                
+                <a href="{% url 'carrinho' %}"><img src="../../static/sistema_principal/images/carrinho1.png" alt="Carrinho" class="carro"></a>
+                <a href=""><img src="../../static/sistema_principal/images/coração.png" alt="" class="coracao"></a>
+            </div>
+        </div>
+    </header>
+    
+    <main>
+        <div class="box">
+            <h1>Dados da compra</h1>
+            <form action="{% url 'checkout' %}" method="post" id="payment-form">
+                {% csrf_token %}
+                <label for="endereco">Endereço:</label>
+                <input type="text" id="endereco" name="endereco" placeholder="Digite seu endereço" required>
+                
+                <label for="pagamento">Método de Pagamento:</label>
+                <select id="pagamento" name="pagamento" required>
+                    <option value="credito">Cartão de Crédito</option>
+                    <option value="debito">Cartão de Débito</option>
+                    <option value="pix">Pix</option>
+                </select>
+
+                <div id="pix-info" style="display: none;">
+                    <p>Chave Pix: 717.521.124.12</p> <!-- Atualize com a chave Pix real -->
+                </div>
+
+                <div id="boleto-info" style="display: none;">
+                    <p>Boleto gerado. Você será redirecionado para o pagamento.</p>
+                </div>
+
+                <div id="card-container">
+                    <div id="card-element"></div>
+                    <div id="card-errors" role="alert"></div> <!-- Contêiner para exibir erros do Stripe -->
+                </div>
+                
+                <button type="submit">Confirmar Pedido</button>
+            </form>
+        </div>
+    </main>
+</body>
+</html>
